@@ -15,6 +15,8 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,37 +24,60 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import com.sri.dockeeper.domain.model.Document
 import com.sri.dockeeper.ui.theme.DocKeeperTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ListDocScreen(listDocs: List<Document>) {
+fun ListDocScreen(
+    viewModel: ViewModel,
+    navController: NavController,
+) {
+     val listDocs: MutableState<List<Document>?> = remember {
+        mutableStateOf(null)
+    }
+    LaunchedEffect(Unit) {
+        listDocs.value = viewModel.getAllDoc()
+    }
     Scaffold(
-        topBar = { TopBar(onAction = { /*TODO*/ }, showNavigationIcon = true) },
-        bottomBar = { BottomBar() },
+        topBar = {
+            TopBar(
+                onAction = { navController.popBackStack() },
+                showNavigationIcon = true,
+            )
+        },
+        bottomBar = { BottomBar({}, navController) },
     ) { innerPading ->
-        var isItemSelected by remember { mutableStateOf(false) }
-        var selectedOption by remember { mutableStateOf(listDocs[0]) }
+        var listDoc = if (listDocs.value.isNullOrEmpty()) null else listDocs.value?.get(0)
 
         LazyColumn(modifier = Modifier.fillMaxSize().padding(innerPading)) {
-            items(listDocs) { doc ->
-                DocItem(
-                    doc,
-                    {
-                        selectedOption = doc
-                        isItemSelected = true
-                    },
-                    isItemSelected = isItemSelected,
-                )
+            listDocs.value?.let {
+                items(it) { doc ->
+                    var isItemSelected by remember { mutableStateOf(false) }
+                   // var selectedOption = doc.id
+
+                    DocItem(
+                        doc,
+                        {
+                        //    selectedOption = doc.id
+                            isItemSelected = true
+                        },
+                        isItemSelected = isItemSelected,
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-fun DocItem(doc: Document, onRadioButtonClick: () -> Unit, isItemSelected: Boolean) {
+fun DocItem(
+    doc: Document,
+    onRadioButtonClick: () -> Unit,
+            isItemSelected: Boolean,
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

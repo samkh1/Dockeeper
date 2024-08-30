@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -31,11 +32,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -101,6 +102,18 @@ dependencies {
     // optional - Test helpers
     testImplementation("androidx.room:room-testing:$room_version")
 
-    // optional - Paging 3 Integration
-    implementation("androidx.room:room-paging:$room_version")
+    val camerax_version = "1.3.0-alpha01" // Use the latest version available
+
+    // CameraX core library using Camera2
+    implementation("androidx.camera:camera-core:$camerax_version")
+    implementation("androidx.camera:camera-camera2:$camerax_version")
+
+    // Lifecycle library for CameraX
+    implementation("androidx.camera:camera-lifecycle:$camerax_version")
+
+    // CameraX View class
+    implementation("androidx.camera:camera-view:$camerax_version")
+
+    // Optional: CameraX extensions
+    implementation("androidx.camera:camera-extensions:$camerax_version")
 }

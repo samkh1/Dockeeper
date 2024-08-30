@@ -3,4 +3,5 @@
     <string name="save_label">Save</string>
     <string name="list_label">List</string>
     <string name="cancel_label">Cancel</string>
+    <string name="empty_list">The list is empty! Please add a document</string>
 </resources>

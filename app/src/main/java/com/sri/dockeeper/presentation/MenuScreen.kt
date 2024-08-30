@@ -18,29 +18,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.sri.dockeeper.R
+import com.sri.dockeeper.presentation.navigation.Screens
 import com.sri.dockeeper.ui.theme.DocKeeperTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MenuScreen(
-    onSaveAction: () -> Unit,
-    onNavigateBack: () -> Unit,
+     navController: NavController
 ) {
     Scaffold(topBar = {
-        TopBar(onAction = { onNavigateBack() }, showNavigationIcon = false)
+        TopBar(onAction = { navController.popBackStack()}, showNavigationIcon = false)
     }, modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            MenuButton(onButtonClick = { onSaveAction() }, label = stringResource(id = R.string.save_label))
+            MenuButton(
+                onButtonClick = { navController.navigate(route = Screens.Scan.route) },
+                label = stringResource(id = R.string.save_label),
+            )
             Spacer(modifier = Modifier.padding(all = 20.dp))
             MenuButton(
                 onButtonClick = {
-                    // ListDocScreen(listDocs = listDoc)
+                    navController.navigate(route = Screens.List.route)
                 },
                 label = stringResource(id = R.string.list_label),
             )

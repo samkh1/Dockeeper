@@ -25,7 +25,7 @@ class DocumentDaoRepository_Imp @Inject constructor(
         docDao.deleteDoc(id)
     }
 
-    override suspend fun insertDocument(doc: DocumentEntity) {
-        docDao.insert(doc)
+    override suspend fun insertDocument(doc: Document) {
+        docDao.insert(mapper.mapToDocumentEntity(doc))
     }
 }

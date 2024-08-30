@@ -7,5 +7,5 @@ interface DocumentDaoRepository {
     suspend fun getDocument(id: Int): Document
     suspend fun getAllDocument(): List<Document>
     suspend fun deleteDocument(id: Int)
-    suspend fun insertDocument(doc: DocumentEntity)
+    suspend fun insertDocument(doc: Document)
 }
